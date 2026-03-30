@@ -251,6 +251,8 @@
   footer .logo { font-family: var(--serif); color: var(--white-mid); font-size: 0.95rem; }
   footer .logo span { color: var(--red); }
   footer .copy { font-size: 0.78rem; color: #444; }
+  .footer-link { color: #666; font-size: 0.78rem; text-decoration: none; transition: color 0.2s; }
+  .footer-link:hover { color: var(--red); }
 
   /* RESPONSIVE */
   @media (max-width: 900px) {
@@ -331,7 +333,7 @@
     <div class="ellium-launch-preview">
       <img src="ellium-preview.png" alt="ELLIUM interface preview" style="width:100%; height:100%; object-fit:cover; display:block;">
       <div class="ellium-launch-overlay">
-        <a href="https://littlefordlearning.github.io/ELLIUM/ELLIUM%20-%20Chapter%201.html" target="_blank" class="ellium-launch-btn">Launch ELLIUM &#8594;</a>
+        <a href="YOUR_ELLIUM_GITHUB_URL_HERE" target="_blank" class="ellium-launch-btn">Launch ELLIUM &#8594;</a>
       </div>
     </div>
     <div class="ellium-launch-info">
@@ -339,7 +341,7 @@
       <p class="ellium-launch-title">ELLIUM — Chapter 1</p>
       <p class="ellium-launch-desc">A detective narrative where you interrogate a malfunctioning AI agent. Every choice you make is a reasoning trace — there are no passive observers here.</p>
       <p class="ellium-launch-note">Opens in a new tab &nbsp;·&nbsp; Works best on desktop &nbsp;·&nbsp; No login required</p>
-      <a href="https://littlefordlearning.github.io/ELLIUM/ELLIUM%20-%20Chapter%201.html" target="_blank" class="ellium-launch-btn" style="margin-top:1.5rem; display:inline-flex;">Launch ELLIUM &#8594;</a>
+      <a href="YOUR_ELLIUM_GITHUB_URL_HERE" target="_blank" class="ellium-launch-btn" style="margin-top:1.5rem; display:inline-flex;">Launch ELLIUM &#8594;</a>
     </div>
   </div>
 
@@ -499,10 +501,10 @@
     <p class="contact-note">If you're solving a genuine capability problem, let's talk.</p>
   </div>
   <div class="contact-cards">
-    <a href="/cdn-cgi/l/email-protection#9ad6f3eeeef6fffcf5e8feb4fbe3fefff4dafdf7fbf3f6b4f9f5f7" class="contact-card">
+    <a href="mailto:Littleford.ayden@gmail.com" class="contact-card">
       <div class="contact-card-icon">&#9993;</div>
       <p class="contact-card-label">Email</p>
-      <p class="contact-card-value"><span class="__cf_email__" data-cfemail="aee2c7dadac2cbc8c1dcca80cfd7cacbc0eec9c3cfc7c280cdc1c3">[email&#160;protected]</span></p>
+      <p class="contact-card-value">Littleford.ayden@gmail.com</p>
     </a>
     <a href="https://www.linkedin.com/in/ayden-littleford-726915126/" target="_blank" class="contact-card">
       <div class="contact-card-icon">&#128188;</div>
@@ -515,9 +517,21 @@
 <!-- FOOTER -->
 <footer>
   <span class="logo">Littleford <span>Learning</span></span>
+  <span class="footer-links">
+    <a href="mailto:Littleford.ayden@gmail.com" class="footer-link">Littleford.ayden@gmail.com</a>
+    <span style="color:#444;">&nbsp;&middot;&nbsp;</span>
+    <a href="https://www.linkedin.com/in/ayden-littleford-726915126/" target="_blank" class="footer-link">LinkedIn</a>
+  </span>
   <span class="copy">&#169; 2026 &middot; Ayden Littleford</span>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
   function toggleAccordion(toggle) {
-  
+    const body = toggle.nextElementSibling;
+    const icon = toggle.querySelector('.toggle-icon');
+    body.classList.toggle('open');
+    icon.style.transform = body.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+  }
+</script>
+</body>
+</html>
