@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Littleford Learning</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #1A1A1A;
+    --bg-card:   #222222;
+    --bg-panel:  #2A2A2A;
+    --red:       #E8453C;
+    --red-dim:   rgba(232,69,60,0.12);
+    --red-hover: #D03830;
+    --white:     #FFFFFF;
+    --white-mid: #A0A0A0;
+    --border:    rgba(255,255,255,0.1);
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans:  'DM Sans', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--sans); background: var(--bg); color: var(--white); font-size: 16px; line-height: 1.6; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(26,26,26,0.95);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+  .nav-logo { font-family: var(--serif); font-size: 1.2rem; font-weight: 600; color: var(--white); text-decoration: none; }
+  .nav-logo span { color: var(--red); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a { font-size: 0.82rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--white-mid); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--red); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh; display: flex; align-items: center;
+    padding: 100px 5% 80px; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; bottom: 0; right: 0;
+    width: 48%; height: 55%; background: var(--red);
+    clip-path: polygon(12% 0%, 100% 0%, 100% 100%, 0% 100%);
+    opacity: 0.9; z-index: 0;
+  }
+  .hero::after {
+    content: ''; position: absolute; bottom: 0; right: 0;
+    width: 48%; height: 55%;
+    background: linear-gradient(135deg, transparent 40%, rgba(0,0,0,0.3));
+    z-index: 1; pointer-events: none;
+  }
+  .hero-content { position: relative; z-index: 2; max-width: 620px; }
+  .hero-eyebrow {
+    font-size: 0.75rem; font-weight: 500; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--red); margin-bottom: 1.2rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .hero-eyebrow::before { content: ''; display: block; width: 32px; height: 1px; background: var(--red); }
+  .hero h1 { font-family: var(--serif); font-size: clamp(2.4rem, 4.5vw, 3.8rem); font-weight: 500; line-height: 1.15; color: var(--white); margin-bottom: 1.5rem; }
+  .hero h1 em { font-style: italic; color: var(--red); }
+  .hero-desc { font-size: 1rem; color: var(--white-mid); line-height: 1.85; max-width: 520px; margin-bottom: 2.5rem; }
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    background: var(--red); color: var(--white); padding: 0.9rem 2.2rem;
+    border-radius: 3px; font-size: 0.85rem; font-weight: 500;
+    text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .hero-cta:hover { background: var(--red-hover); transform: translateY(-2px); }
+
+  /* SECTIONS */
+  section { padding: 100px 5%; }
+  .section-label {
+    font-size: 0.72rem; font-weight: 500; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--red); margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .section-label::before { content: ''; display: block; width: 24px; height: 1px; background: var(--red); }
+  .section-title { font-family: var(--serif); font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 500; line-height: 1.2; color: var(--white); margin-bottom: 1rem; }
+  .section-sub { font-size: 0.98rem; color: var(--white-mid); max-width: 600px; line-height: 1.8; }
+  .section-header { margin-bottom: 4rem; }
+
+  /* ABOUT */
+  #about { background: var(--bg-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 6rem; align-items: start; }
+  .about-img-wrap { position: relative; }
+  .about-img-placeholder {
+    width: 100%; aspect-ratio: 4/5;
+    background: linear-gradient(145deg, #2A2A2A, #1A1A1A);
+    border: 1px solid var(--border); border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--serif); font-size: 1rem; color: var(--white-mid);
+    position: relative; overflow: hidden;
+  }
+  .about-img-placeholder::before {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 40%; background: var(--red); opacity: 0.15;
+  }
+  .about-img-placeholder::after {
+    content: ''; position: absolute; bottom: 16px; right: 16px;
+    width: 80px; height: 80px; border: 1px solid var(--red); border-radius: 2px; opacity: 0.25;
+  }
+  .about-tag {
+    position: absolute; bottom: -14px; left: 20px;
+    background: var(--red); color: var(--white);
+    font-size: 0.72rem; font-weight: 500; padding: 0.4rem 1rem;
+    border-radius: 2px; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .about-text p { font-size: 0.98rem; color: var(--white-mid); line-height: 1.85; margin-bottom: 1.25rem; }
+  .skills-grid { margin-top: 2rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .skill-tag {
+    background: var(--red-dim); color: var(--red);
+    border: 1px solid rgba(232,69,60,0.25);
+    font-size: 0.78rem; font-weight: 500; padding: 0.3rem 0.85rem;
+    border-radius: 2px; letter-spacing: 0.04em;
+  }
+
+  /* ELLIUM */
+  #ellium { background: var(--bg); }
+  .ellium-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; margin-bottom: 4rem; }
+  .ellium-launch {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 4rem;
+  }
+  .ellium-launch-preview {
+    position: relative;
+    aspect-ratio: 4/3;
+    overflow: hidden;
+  }
+  .ellium-launch-overlay {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.45);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .ellium-launch-preview:hover .ellium-launch-overlay { opacity: 1; }
+  .ellium-launch-info {
+    padding: 2.5rem;
+    display: flex; flex-direction: column; justify-content: center;
+    border-left: 1px solid var(--border);
+  }
+  .ellium-launch-label { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--red); margin-bottom: 0.5rem; }
+  .ellium-launch-title { font-family: var(--serif); font-size: 1.6rem; font-weight: 500; color: var(--white); margin-bottom: 1rem; line-height: 1.2; }
+  .ellium-launch-desc { font-size: 0.92rem; color: var(--white-mid); line-height: 1.8; margin-bottom: 0.75rem; }
+  .ellium-launch-note { font-size: 0.78rem; color: rgba(160,160,160,0.6); letter-spacing: 0.02em; }
+  .ellium-launch-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--red); color: var(--white);
+    padding: 0.9rem 2rem; border-radius: 3px;
+    font-size: 0.85rem; font-weight: 500;
+    text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase;
+    white-space: nowrap;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .ellium-launch-btn:hover { background: var(--red-hover); transform: translateY(-2px); }
+  .ellium-summary h3 { font-family: var(--serif); font-size: 1.4rem; font-weight: 500; color: var(--white); margin-bottom: 1rem; }
+  .ellium-summary p { font-size: 0.95rem; color: var(--white-mid); line-height: 1.85; margin-bottom: 1rem; }
+  .ellium-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
+  .ellium-tag { background: var(--red-dim); color: var(--red); border: 1px solid rgba(232,69,60,0.25); font-size: 0.75rem; font-weight: 500; padding: 0.3rem 0.85rem; border-radius: 2px; letter-spacing: 0.04em; }
+
+  /* PROCESS TIMELINE */
+  .process-section { border-top: 1px solid var(--border); padding-top: 4rem; margin-bottom: 4rem; }
+  .process-title { font-family: var(--serif); font-size: 1.6rem; font-weight: 500; color: var(--white); margin-bottom: 0.5rem; }
+  .process-sub { font-size: 0.92rem; color: var(--white-mid); margin-bottom: 3rem; max-width: 560px; line-height: 1.75; }
+  .process-steps { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+  .process-step { background: var(--bg-card); padding: 2rem 2rem 2rem 2rem; display: grid; grid-template-columns: 3rem 1fr; gap: 1.5rem; align-items: start; }
+  .process-step:hover { background: var(--bg-panel); }
+  .process-num { font-family: var(--serif); font-size: 1.5rem; color: var(--red); font-weight: 600; padding-top: 0.1rem; }
+  .process-step-label { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--red); margin-bottom: 0.4rem; }
+  .process-step-title { font-family: var(--serif); font-size: 1.05rem; font-weight: 500; color: var(--white); margin-bottom: 0.6rem; }
+  .process-step-body { font-size: 0.88rem; color: var(--white-mid); line-height: 1.8; }
+
+  /* ACCORDION */
+  .justification-section { border-top: 1px solid var(--border); padding-top: 4rem; }
+  .accordion-toggle {
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; padding: 1.5rem 2rem;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 4px; transition: background 0.2s;
+  }
+  .accordion-toggle:hover { background: var(--bg-panel); }
+  .accordion-toggle-label { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--red); margin-bottom: 0.2rem; }
+  .accordion-toggle-title { font-family: var(--serif); font-size: 1.1rem; color: var(--white); }
+  .toggle-icon { font-size: 1.2rem; color: var(--red); transition: transform 0.3s; flex-shrink: 0; }
+  .accordion-body { display: none; background: var(--bg-card); border: 1px solid var(--border); border-top: none; border-radius: 0 0 4px 4px; padding: 2.5rem 2rem; }
+  .accordion-body.open { display: block; }
+  .accordion-body p { font-size: 0.92rem; color: var(--white-mid); line-height: 1.9; margin-bottom: 1.25rem; }
+  .accordion-body h4 { font-family: var(--serif); font-size: 1rem; color: var(--white); margin: 2rem 0 0.75rem; }
+  .bibliography { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+  .bibliography h4 { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--red); margin-bottom: 1.25rem; }
+  .bibliography p { font-size: 0.82rem; color: var(--white-mid); line-height: 1.75; margin-bottom: 0.75rem; padding-left: 1.5rem; text-indent: -1.5rem; }
+
+  /* FUTURE PROJECTS */
+  #future { background: var(--bg-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .future-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .future-card {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 4px; padding: 2rem;
+    position: relative; overflow: hidden;
+  }
+  .future-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 3px; background: var(--red); opacity: 0.5;
+  }
+  .future-badge {
+    display: inline-block; font-size: 0.65rem; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    background: var(--red-dim); color: var(--red);
+    border: 1px solid rgba(232,69,60,0.25);
+    padding: 0.2rem 0.65rem; border-radius: 2px; margin-bottom: 1rem;
+  }
+  .future-card h3 { font-family: var(--serif); font-size: 1.15rem; font-weight: 500; color: var(--white); margin-bottom: 0.75rem; }
+  .future-card p { font-size: 0.88rem; color: var(--white-mid); line-height: 1.75; }
+  .future-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.25rem; }
+  .future-tag { font-size: 0.7rem; color: var(--white-mid); border: 1px solid var(--border); padding: 0.2rem 0.6rem; border-radius: 2px; }
+
+  /* CONTACT */
+  #contact { background: var(--red); text-align: center; }
+  #contact .section-label { justify-content: center; color: rgba(255,255,255,0.75); }
+  #contact .section-label::before { background: rgba(255,255,255,0.75); }
+  #contact .section-title { color: var(--white); }
+  #contact .section-sub { color: rgba(255,255,255,0.85); margin: 0 auto 0.75rem; font-size: 1.05rem; font-style: italic; }
+  #contact .contact-note { color: rgba(255,255,255,0.65); font-size: 0.88rem; margin: 0 auto 3rem; max-width: 500px; }
+  .contact-cards { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; }
+  .contact-card { background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; padding: 1.75rem 2.25rem; min-width: 190px; text-align: center; text-decoration: none; transition: background 0.2s; }
+  .contact-card:hover { background: rgba(0,0,0,0.35); }
+  .contact-card-icon { font-size: 1.4rem; margin-bottom: 0.6rem; }
+  .contact-card-label { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 0.3rem; }
+  .contact-card-value { font-size: 0.88rem; color: var(--white); }
+
+  /* FOOTER */
+  footer { background: #111111; padding: 1.75rem 5%; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); }
+  footer .logo { font-family: var(--serif); color: var(--white-mid); font-size: 0.95rem; }
+  footer .logo span { color: var(--red); }
+  footer .copy { font-size: 0.78rem; color: #444; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .about-grid, .ellium-layout, .future-grid, .ellium-launch { grid-template-columns: 1fr; gap: 2.5rem; }
+  }
+  @media (max-width: 640px) {
+    .hero::before, .hero::after { display: none; }
+    .nav-links { display: none; }
+    .process-step { grid-template-columns: 2rem 1fr; gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Littleford <span>Learning</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#ellium">ELLIUM</a></li>
+    <li><a href="#future">Future Work</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <p class="hero-eyebrow">Learning &amp; Development Portfolio</p>
+    <h1>Evidence-based design. <em>Real-world</em> results.</h1>
+    <p class="hero-desc">
+      I'm Ayden Littleford — a Learning and Development Designer working across corporate training and higher education. I bridge evidence-based practice and creative technology to build experiences that develop genuine capability, not just course completions.
+    </p>
+    <a href="#ellium" class="hero-cta">See My Work &#8594;</a>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div style="max-width: 860px;">
+    <p class="section-label">About</p>
+    <h2 class="section-title">Where evidence meets execution</h2>
+    <p style="font-size:1rem; color:var(--white-mid); line-height:1.85; margin-bottom:1.25rem;">
+      I design learning experiences that solve real capability problems — for corporate teams building new skills and for students navigating complex ideas. Whether I'm developing a scenario-based training program, an AI literacy module, or an immersive educational narrative, I start with the same question: <em style="color:var(--white);">what does someone need to be able to do, and what's stopping them?</em>
+    </p>
+    <p style="font-size:1rem; color:var(--white-mid); line-height:1.85; margin-bottom:1.25rem;">
+      My practice is grounded in Adult Learning Principles, Cognitive Load Theory, and Multimedia Learning — frameworks I use not as labels but as active design tools. I bring these to life using H5P, Articulate, and Camtasia, and increasingly with AI workflows that accelerate production without compromising quality.
+    </p>
+    <p style="font-size:1rem; color:var(--white-mid); line-height:1.85; margin-bottom:2rem;">
+      I work across higher education and corporate environments, and I'm particularly focused on AI literacy — helping learners and organisations build the critical thinking skills needed to use AI tools responsibly and effectively.
+    </p>
+    <div class="skills-grid">
+      <span class="skill-tag">Narrative Design</span>
+      <span class="skill-tag">Adult Learning Principles</span>
+      <span class="skill-tag">Cognitive Load Theory</span>
+      <span class="skill-tag">Multimedia Learning</span>
+      <span class="skill-tag">Kirkpatrick Model</span>
+      <span class="skill-tag">AI Literacy</span>
+      <span class="skill-tag">WCAG Accessibility</span>
+      <span class="skill-tag">Articulate 360</span>
+      <span class="skill-tag">H5P</span>
+      <span class="skill-tag">Camtasia</span>
+      <span class="skill-tag">AI Workflows</span>
+      <span class="skill-tag">Design Iteration</span>
+    </div>
+  </div>
+</section>
+
+<!-- ELLIUM -->
+<section id="ellium">
+  <div class="section-header">
+    <p class="section-label">Featured Project</p>
+    <h2 class="section-title">ELLIUM</h2>
+    <p class="section-sub">A narrative-driven micro-scenario that builds AI verification literacy through detective investigation — relevant to higher education assessment design and corporate AI governance training alike.</p>
+  </div>
+
+  <div class="ellium-launch">
+    <div class="ellium-launch-preview">
+      <img src="ellium-preview.png" alt="ELLIUM interface preview" style="width:100%; height:100%; object-fit:cover; display:block;">
+      <div class="ellium-launch-overlay">
+        <a href="littlefordlearning.github.io" target="_blank" class="ellium-launch-btn">Launch ELLIUM &#8594;</a>
+      </div>
+    </div>
+    <div class="ellium-launch-info">
+      <p class="ellium-launch-label">Interactive Experience</p>
+      <p class="ellium-launch-title">ELLIUM — Chapter 1</p>
+      <p class="ellium-launch-desc">A detective narrative where you interrogate a malfunctioning AI agent. Every choice you make is a reasoning trace — there are no passive observers here.</p>
+      <p class="ellium-launch-note">Opens in a new tab &nbsp;·&nbsp; Works best on desktop &nbsp;·&nbsp; No login required</p>
+      <a href="https://littlefordlearning.github.io" target="_blank" class="ellium-launch-btn" style="margin-top:1.5rem; display:inline-flex;">Launch ELLIUM &#8594;</a>
+    </div>
+  </div>
+
+  <div class="ellium-summary" style="max-width:860px; margin-bottom:4rem;">
+      <h3>What is ELLIUM?</h3>
+      <p>
+        ELLIUM places learners inside a detective narrative alongside ELLE — a pedagogical agent — to interrogate a malfunctioning AI called the Auditor. The Auditor fabricates sources, corrupts citations, and produces plausible-sounding misinformation. Learners must investigate its claims, check evidence, and decide what to trust.
+      </p>
+      <p>
+        The core skill — <em style="color:var(--white);">verification literacy</em> — is urgently needed across sectors. In higher education it addresses academic integrity in the age of AI. In corporate contexts it maps directly to AI governance, information quality assurance, and decision-making under uncertainty.
+      </p>
+      <p>
+        Rather than describing verification abstractly, ELLIUM makes learners enact it. Every branching choice is a trace of how someone thinks — making reasoning visible in a way no written assignment can.
+      </p>
+      <div class="ellium-tags">
+        <span class="ellium-tag">H5P Branching Scenario</span>
+        <span class="ellium-tag">Twine Narrative</span>
+        <span class="ellium-tag">Verification Literacy</span>
+        <span class="ellium-tag">AI Literacy</span>
+        <span class="ellium-tag">Critical Thinking</span>
+        <span class="ellium-tag">Scenario-Based Learning</span>
+        <span class="ellium-tag">Higher Education</span>
+        <span class="ellium-tag">Corporate Training</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- DESIGN PROCESS -->
+  <div class="process-section">
+    <p class="section-label">Design Process</p>
+    <h3 class="process-title">From Problem to Prototype</h3>
+    <p class="process-sub">ELLIUM was designed iteratively — moving from a clearly identified learning need, through a series of tool and architecture decisions, to a working prototype validated by peers and lecturer feedback.</p>
+
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="process-num">01</div>
+        <div>
+          <p class="process-step-label">Problem</p>
+          <p class="process-step-title">Identifying the Learning Need</p>
+          <p class="process-step-body">First-year university students were using generative AI informally but had never been taught to verify its outputs. Research showed that 55% of GPT-3.5 references were fabricated (Walters &amp; Wilder, 2023), yet students lacked confidence detecting hallucinations or checking sources. The need was clear: a low-stakes, engaging practice environment for verification skills — not a compliance module.</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="process-num">02</div>
+        <div>
+          <p class="process-step-label">Process</p>
+          <p class="process-step-title">Building the H5P + Twine Hybrid</p>
+          <p class="process-step-body">H5P's Branching Scenario tool handled onboarding and learning outcomes, but proved too linear for the interrogation scene — it couldn't track learner decisions or support conditional logic. Twine was embedded via iframe to manage state-tracking and meaningful narrative branching. Unlike linear eLearning, Twine allows the learner's choices to shape the investigation — building ownership of the verification process rather than compliance with it.</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="process-num">03</div>
+        <div>
+          <p class="process-step-label">Outcome</p>
+          <p class="process-step-title">Validated Prototype, Clear Roadmap</p>
+          <p class="process-step-body">Feedback from peers and lecturer validated the core concept — the detective narrative, cognitive alignment, and relevance of the learning need were all well-received. Constraints clarified priorities. The result was a leaner, sharper product than the original brief imagined. Next iterations will prioritise user testing with first-year students, deeper Twine mastery, and WCAG accessibility improvements.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JUSTIFICATION ACCORDION — sits directly below ELLIUM summary -->
+  <div class="justification-section" style="margin-bottom: 4rem;">
+    <div class="accordion-toggle" onclick="toggleAccordion(this)">
+      <div>
+        <p class="accordion-toggle-label">Full Design Rationale</p>
+        <p class="accordion-toggle-title">Justification for Choice and Design of ELLIUM</p>
+      </div>
+      <span class="toggle-icon">&#8595;</span>
+    </div>
+    <div class="accordion-body">
+      <h4>The Problem: AI and Assessment Validity</h4>
+      <p>The rapid rise of generative AI has exposed longstanding structural weaknesses in traditional assessment. Because most university tasks rely on written artefacts, it is increasingly difficult to determine whether a student or a model produced the work. Lodge et al. (2025) note that detecting student use of AI is extremely difficult and argue that higher education must prioritise assessment redesign. Mulder et al. (2023) similarly contend that AI detection tools are unreliable, easily circumvented, and unlikely to achieve the capacity to assess generative AI usage. Dawson et al. (2024) extend this argument by reframing cheating as a problem of validity: if an assessment permits outsourcing, educators cannot make defensible claims about a learner's capability.</p>
+      <p>A major validity concern is the widespread fabrication and corruption of bibliographic data produced by AI systems. Walters and Wilder (2023) found that 55 percent of GPT-3.5 references and 18 percent of GPT-4 references were fabricated. Franzoni Velazquez et al. (2024) report that over half of AI-generated references do not exist. Australian data adds a further layer: Gen Z learners rely heavily on generative AI for study but lack confidence in assessing accuracy and reliability (Denejkina, 2025). Students require explicit teaching in verification literacy — how to interrogate claims, check source origins, and judge whether evidence is trustworthy.</p>
+
+      <h4>Constructive Alignment and Sustainable Assessment</h4>
+      <p>ELLIUM was developed through constructive alignment (Biggs, 1996) and sustainable assessment principles (Boud, 2000). Verification literacy is an enduring capability that supports learners beyond a single assessment task. In ELLIUM, this is operationalised by embedding verification behaviours within an interactive micro-scenario where a malfunctioning AI agent produces questionable information. Students enact the cognitive processes being assessed rather than describing them abstractly.</p>
+
+      <h4>Cognitive Load Theory and Multimedia Learning</h4>
+      <p>The scenario is grounded in Cognitive Load Theory (CLT) and the Cognitive Theory of Multimedia Learning (CTML), which state that learning depends on managing limited cognitive capacity through active selection, organisation and integration of information (Mayer, 2024). ELLIUM segments the task into short investigative steps, maintains coherence and minimises extraneous detail. Novices are supported through a worked example delivered by ELLE, whose guidance gradually fades as learners gain confidence (Kirschner et al., 2006; Krop et al., 2023).</p>
+
+      <h4>Motivation, Narrative, and Engagement</h4>
+      <p>Leitner et al. (2023) argue that game-based learning is particularly well suited to AI-related competencies because gameplay parallels structured reasoning processes. ELLIUM employs a detective narrative that mirrors verification processes: interrogating claims, identifying inconsistencies and seeking corroboration. Serious-games research (Habgood &amp; Ainsworth, 2011; Naul &amp; Liu, 2020; Zhong, 2022) demonstrates that narrative-embedded decisions enhance motivation and germane processing by making cognitive work meaningful.</p>
+
+      <h4>Accessibility</h4>
+      <p>Batz et al. (2022) highlight that simple interaction types, plain language, uncluttered interfaces and consistent feedback improve usability for diverse learners. ELLIUM uses click-only interactions, visual clarity, and supportive prompts through ELLE. A current limitation is the lack of full keyboard navigation in H5P and Twine — a constraint of the authoring tools rather than design intent. Future iterations will adopt more accessible frameworks aligned with WCAG 2.1 standards.</p>
+
+      <h4>Future Priorities</h4>
+      <p>The EDUCAUSE Horizon Report (2025) identifies AI literacy, verification competence and authentic assessment as future priorities. ELLIUM responds to these by embedding verification behaviours within a cognitively aligned, inclusive and AI-resilient micro-assessment that preserves validity and generates defensible evidence of learning.</p>
+
+      <div class="bibliography">
+        <h4>Bibliography</h4>
+        <p>2025 EDUCAUSE Horizon Report | Teaching and Learning Edition. (2025). EDUCAUSE Library. https://library.educause.edu/resources/2025/5/2025-educause-horizon-report-teaching-and-learning-edition</p>
+        <p>Arslan, P. (2012). A Review of Multimedia Learning Principles. <em>Mersin Universitesi Egitim Fakultesi Dergisi</em>, <em>8</em>. https://doi.org/10.17860/efd.41251</p>
+        <p>Batz, V., et al. (2022). Accessible Design of Serious Games for People with Intellectual Disabilities. <em>Proceedings of DiGRA 2022</em>. https://doi.org/10.26503/dl.v2022i1.1372</p>
+        <p>Biggs, J. (1996). Enhancing teaching through constructive alignment. <em>Higher Education</em>, <em>32</em>(3), 347-364. https://doi.org/10.1007/BF00138871</p>
+        <p>Boud, D. (2000). Sustainable Assessment. <em>Studies in Continuing Education</em>, <em>22</em>(2), 151-167. https://doi.org/10.1080/713695728</p>
+        <p>Corbin, T., Dawson, P., &amp; Liu, D. (2025). Talk is cheap. <em>Assessment &amp; Evaluation in Higher Education</em>. https://doi.org/10.1080/02602938.2025.2503964</p>
+        <p>Dawson, P., et al. (2024). Validity matters more than cheating. <em>Assessment &amp; Evaluation in Higher Education</em>, <em>49</em>(7), 1005-1016. https://doi.org/10.1080/02602938.2024.2386662</p>
+        <p>Denejkina, A. (2025). <em>From Gen Z to GenAI</em>. The Insight Centre. http://theinsightcentre.com.au/</p>
+        <p>Franzoni Velazquez, A. L., et al. (2024). Retracting ChatGPT. <em>Discover Education</em>, <em>3</em>(1). https://doi.org/10.1007/s44217-024-00333-1</p>
+        <p>Habgood, M. P. J., &amp; Ainsworth, S. E. (2011). Motivating Children to Learn Effectively. <em>Journal of the Learning Sciences</em>, <em>20</em>(2), 169-206. https://doi.org/10.1080/10508406.2010.508029</p>
+        <p>Kirschner, P. A., Sweller, J., &amp; Clark, R. E. (2006). Why Minimal Guidance During Instruction Does Not Work. <em>Educational Psychologist</em>, <em>41</em>(2), 75-86. https://doi.org/10.1207/s15326985ep4102_1</p>
+        <p>Krop, P., et al. (2023). Traversing the Pass. <em>Proceedings of the 23rd ACM IVA Conference</em>. https://doi.org/10.1145/3570945.3607360</p>
+        <p>Leitner, M., et al. (2023). Designing Game-Based Learning for High School AI Education. <em>International Journal of AI in Education</em>, <em>33</em>(2), 384-398. https://doi.org/10.1007/s40593-022-00327-w</p>
+        <p>Lodge, J. M., et al. (2025). <em>Enacting Assessment Reform in a Time of Artificial Intelligence</em>. TEQSA. https://www.teqsa.gov.au/</p>
+        <p>Mayer, R. E. (2024). <em>Multimedia Learning</em> (3rd ed.). Cambridge University Press.</p>
+        <p>Michailidis, L., et al. (2018). Flow and Immersion in Video Games. <em>Frontiers in Psychology</em>, <em>9</em>. https://doi.org/10.3389/fpsyg.2018.01682</p>
+        <p>Mulder, R., Baik, C., &amp; Ryan, T. (2023). <em>Rethinking Assessment in Response to AI</em>. Melbourne CSHE.</p>
+        <p>Naul, E., &amp; Liu, M. (2020). Why Story Matters. <em>Journal of Educational Computing Research</em>, <em>58</em>(3), 687-707. https://doi.org/10.1177/0735633119859904</p>
+        <p>Walters, W. H., &amp; Wilder, E. I. (2023). Fabrication and errors in citations generated by ChatGPT. <em>Scientific Reports</em>, <em>13</em>(1), 14045-14048. https://doi.org/10.1038/s41598-023-41032-5</p>
+        <p>Zhong, L. (2022). Incorporating personalized learning in a role-playing game via SID model. <em>Smart Learning Environments</em>, <em>9</em>(1), 36. https://doi.org/10.1186/s40561-022-00219-5</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FUTURE PROJECTS -->
+<section id="future">
+  <div class="section-header">
+    <p class="section-label">In Development</p>
+    <h2 class="section-title">Future Work</h2>
+    <p class="section-sub">Projects currently in research and early design phases — exploring immersive learning and systems thinking across corporate and educational contexts.</p>
+  </div>
+  <div class="future-grid">
+    <div class="future-card">
+      <span class="future-badge">In Development</span>
+      <h3>The Overview Effect</h3>
+      <p>An AR/VR learning experience exploring the cognitive and emotional shift reported by astronauts upon seeing Earth from space — and what it reveals about perspective, systems thinking, and human interconnection. Designed to develop global mindset capabilities in leadership and sustainability programs.</p>
+      <div class="future-tags">
+        <span class="future-tag">AR / VR</span>
+        <span class="future-tag">Immersive Learning</span>
+        <span class="future-tag">Systems Thinking</span>
+        <span class="future-tag">Leadership Development</span>
+      </div>
+    </div>
+    <div class="future-card">
+      <span class="future-badge">In Development</span>
+      <h3>Electric Vehicles are Systems</h3>
+      <p>A microlearning module designed for automotive salespeople — breaking down how EV batteries work, why range varies, and how charging cycles affect long-term performance. Built to give salespeople confident, accurate answers to the questions customers actually ask on the floor.</p>
+      <div class="future-tags">
+        <span class="future-tag">Microlearning</span>
+        <span class="future-tag">Corporate Training</span>
+        <span class="future-tag">Sales Enablement</span>
+        <span class="future-tag">Technical Training</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-header">
+    <p class="section-label">Contact</p>
+    <h2 class="section-title">Let's build something worth learning</h2>
+    <p class="section-sub">"I work with educators and organisations who want learning that goes beyond content delivery — experiences grounded in evidence, built with creative tools, and designed to achieve results."</p>
+    <p class="contact-note">If you're solving a genuine capability problem, let's talk.</p>
+  </div>
+  <div class="contact-cards">
+    <a href="/cdn-cgi/l/email-protection#9ad6f3eeeef6fffcf5e8feb4fbe3fefff4dafdf7fbf3f6b4f9f5f7" class="contact-card">
+      <div class="contact-card-icon">&#9993;</div>
+      <p class="contact-card-label">Email</p>
+      <p class="contact-card-value"><span class="__cf_email__" data-cfemail="aee2c7dadac2cbc8c1dcca80cfd7cacbc0eec9c3cfc7c280cdc1c3">[email&#160;protected]</span></p>
+    </a>
+    <a href="https://www.linkedin.com/in/ayden-littleford-726915126/" target="_blank" class="contact-card">
+      <div class="contact-card-icon">&#128188;</div>
+      <p class="contact-card-label">LinkedIn</p>
+      <p class="contact-card-value">Ayden Littleford</p>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="logo">Littleford <span>Learning</span></span>
+  <span class="copy">&#169; 2026 &middot; Ayden Littleford</span>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  function toggleAccordion(toggle) {
+  
